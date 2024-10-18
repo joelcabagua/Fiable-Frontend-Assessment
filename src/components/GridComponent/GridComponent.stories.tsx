@@ -45,6 +45,12 @@ export const InvalidDirection: Story = {
 
 export const InvalidCoordinates: Story = {
   args: {
-    defaultValue: '5,1, WEST'
+    defaultValue: 'A,1, SOUTH'
+  }
+};
+
+export const CoordinatesOutOfRange: Story = {
+  args: {
+    defaultValue: '5,1, EAST'
   }
 };

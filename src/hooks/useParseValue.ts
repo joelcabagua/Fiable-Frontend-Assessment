@@ -23,11 +23,15 @@ export const useParseValue = (value: string) => {
     const parsedX = parseInt(xString);
     const parsedY = parseInt(yString);
 
-    if (
-      (isNaN(parsedX) || isNaN(parsedY) || parsedY < 0 || parsedY >= 5 || parsedX < 0 || parsedX >= 5) &&
-      value.length > 0
-    ) {
+    if ((isNaN(parsedX) || isNaN(parsedY)) && value.length > 0) {
       setError('Invalid coordinates.');
+      setX(undefined);
+      setY(undefined);
+      return;
+    }
+
+    if ((parsedY < 0 || parsedY >= 5 || parsedX < 0 || parsedX >= 5) && value.length > 0) {
+      setError('Coordinates out of range.');
       setX(undefined);
       setY(undefined);
       return;
