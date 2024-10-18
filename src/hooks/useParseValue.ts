@@ -22,7 +22,7 @@ export const useParseValue = (value: string) => {
     const parsedY = parseInt(yString);
 
     if (
-      (isNaN(parsedX) || isNaN(parsedY) || parsedY < 0 || parsedY > 5 || parsedX < 0 || parsedX > 5) &&
+      (isNaN(parsedX) || isNaN(parsedY) || parsedY < 0 || parsedY >= 5 || parsedX < 0 || parsedX >= 5) &&
       value.length > 0
     ) {
       setError('Invalid coordinates.');

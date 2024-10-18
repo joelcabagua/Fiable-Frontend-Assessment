@@ -1,6 +1,9 @@
 import React, { useMemo, useRef } from 'react';
-import { Column, Container, Row } from './styled';
+import { Container, Row } from './styled';
 import { Pointer } from './Pointer';
+import { Grid } from '@mui/system';
+import { alpha } from '@mui/material';
+import { theme } from '../../theme';
 
 export type DirectionType = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST';
 
@@ -27,16 +30,7 @@ export const GridComponent: React.FC<Props> = ({ x, y, direction }) => {
       .map((row) => (
         <Row container columns={10} size={1} key={row} spacing={1} justifyContent="center">
           {Array.from(Array(length.current).keys()).map((col) => (
-            <Column size={2} key={col} alignContent="center" textAlign="center">
-              {direction !== null &&
-              direction !== undefined &&
-              isValidAndAbsoluteEqual(y, row) &&
-              isValidAndAbsoluteEqual(x, col) ? (
-                <Pointer direction={direction} />
-              ) : (
-                ''
-              )}
-            </Column>
+            <DataContainer col={col} direction={direction} row={row} x={x} y={y} />
           ))}
         </Row>
       ));
@@ -49,8 +43,36 @@ export const GridComponent: React.FC<Props> = ({ x, y, direction }) => {
   );
 };
 
-const isValidAndAbsoluteEqual = (axis: number | null | undefined, colOrRow: number) => {
-  if (!axis && typeof axis != 'number') return false;
+interface DataProps extends Props {
+  row: number;
+  col: number;
+}
 
-  return axis === colOrRow;
+const DataContainer: React.FC<DataProps> = ({ col, direction, row, x, y }) => {
+  const isNotSelected =
+    direction === null ||
+    direction === undefined ||
+    (!y && typeof y !== 'number') ||
+    (!x && typeof x !== 'number') ||
+    y !== row ||
+    x !== col;
+
+  return (
+    <Grid
+      sx={{
+        bgcolor: !isNotSelected ? alpha(theme.palette.primary.light, 0.4) : 'transparent',
+        transition: 'background-color 0.3s',
+        height: 100,
+        boxShadow: 'none',
+        border: `1px solid ${!isNotSelected ? theme.palette.primary.light : theme.palette.grey[400]}`,
+        borderRadius: '4px'
+      }}
+      size={2}
+      key={col}
+      alignContent="center"
+      textAlign="center"
+    >
+      {!isNotSelected ? <Pointer direction={direction} /> : ''}
+    </Grid>
+  );
 };
