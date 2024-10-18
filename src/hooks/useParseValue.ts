@@ -26,8 +26,13 @@ export const useParseValue = (value: string) => {
       value.length > 0
     ) {
       setError('Invalid coordinates.');
+      setX(undefined);
+      setY(undefined);
       return;
     }
+
+    setX(parsedX);
+    setY(parsedY);
 
     if (!direction) {
       setError('Add direction');
@@ -49,14 +54,12 @@ export const useParseValue = (value: string) => {
         break;
       default:
         setError('Invalid direction');
+        setDirection(undefined);
         return;
     }
 
     setError('');
-
-    setX(parsedX);
-    setY(parsedY);
   }, [value]);
 
-  return !!error ? { x: undefined, y: undefined, direction: undefined, error } : { x, y, direction, error };
+  return { x, y, direction, error };
 };

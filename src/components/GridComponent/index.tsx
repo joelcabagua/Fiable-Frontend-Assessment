@@ -1,9 +1,9 @@
 import React, { useMemo, useRef } from 'react';
 import { Container, Row } from './styled';
-import { Pointer } from './Pointer';
 import { Grid } from '@mui/system';
 import { alpha } from '@mui/material';
 import { theme } from '../../theme';
+import { Pointer } from './Pointer';
 
 export type DirectionType = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST';
 
@@ -23,6 +23,8 @@ interface Props {
 
 export const GridComponent: React.FC<Props> = ({ x, y, direction }) => {
   const length = useRef(5);
+
+  console.log(x, y, direction);
 
   const grid = useMemo(() => {
     return Array.from(Array(length.current).keys())
@@ -49,22 +51,20 @@ interface DataProps extends Props {
 }
 
 const DataContainer: React.FC<DataProps> = ({ col, direction, row, x, y }) => {
-  const isNotSelected =
-    direction === null ||
-    direction === undefined ||
-    (!y && typeof y !== 'number') ||
-    (!x && typeof x !== 'number') ||
-    y !== row ||
-    x !== col;
+  const isSelectedData = typeof y === 'number' && typeof x === 'number' && y === row && x === col;
+
+  // const isNotValidDirectio = direction === null || direction === undefined;
+
+  const isValidDirection = direction !== null && direction !== undefined;
 
   return (
     <Grid
       sx={{
-        bgcolor: !isNotSelected ? alpha(theme.palette.primary.light, 0.4) : 'transparent',
+        bgcolor: isSelectedData ? alpha(theme.palette.primary.light, 0.4) : 'transparent',
         transition: 'background-color 0.3s',
         height: 100,
         boxShadow: 'none',
-        border: `1px solid ${!isNotSelected ? theme.palette.primary.light : theme.palette.grey[400]}`,
+        border: `1px solid ${isSelectedData ? theme.palette.primary.light : theme.palette.grey[400]}`,
         borderRadius: '4px'
       }}
       size={2}
@@ -72,7 +72,7 @@ const DataContainer: React.FC<DataProps> = ({ col, direction, row, x, y }) => {
       alignContent="center"
       textAlign="center"
     >
-      {!isNotSelected ? <Pointer direction={direction} /> : ''}
+      {isValidDirection && isSelectedData ? <Pointer direction={direction} /> : ''}
     </Grid>
   );
 };
