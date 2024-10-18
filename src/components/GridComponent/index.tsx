@@ -24,8 +24,6 @@ interface Props {
 export const GridComponent: React.FC<Props> = ({ x, y, direction }) => {
   const length = useRef(5);
 
-  console.log(x, y, direction);
-
   const grid = useMemo(() => {
     return Array.from(Array(length.current).keys())
       .reverse()
