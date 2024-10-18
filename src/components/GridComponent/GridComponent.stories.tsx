@@ -27,24 +27,24 @@ type Story = StoryObj<typeof meta>;
 
 export const PositionAt00South: Story = {
   args: {
-    value: '0,0, SOUTH'
+    defaultValue: '0,0, SOUTH'
   }
 };
 
 export const PositionAt44West: Story = {
   args: {
-    value: '4,4, WEST'
+    defaultValue: '4,4, WEST'
   }
 };
 
 export const InvalidDirection: Story = {
   args: {
-    value: '2,2, WES'
+    defaultValue: '2,2, WES'
   }
 };
 
 export const InvalidCoordinates: Story = {
   args: {
-    value: '5,1, WEST'
+    defaultValue: '5,1, WEST'
   }
 };
