@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 export const Pointer: React.FC<{ direction: DirectionType }> = ({ direction }) => {
   return (
-    <Box sx={{ transform: directionToRotation(direction) }}>
+    <Box sx={{ transform: directionToRotation(direction) }} data-testid="pointer-icon">
       <ArrowUpward sx={{ color: 'primary.dark' }} fontSize="large" />
     </Box>
   );
