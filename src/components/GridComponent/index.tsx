@@ -1,17 +1,12 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Container, Row } from './styled';
 import { Grid } from '@mui/system';
-import { alpha } from '@mui/material';
+import { alpha, TextField } from '@mui/material';
 import { theme } from '../../theme';
 import { Pointer } from './Pointer';
+import { useParseValue } from '../../hooks/useParseValue';
 
 export type DirectionType = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST';
-
-interface Props {
-  x: number | null | undefined;
-  y: number | null | undefined;
-  direction: DirectionType | null | undefined;
-}
 
 /**
  * [0,4]   [1,4]   [2,4]   [3,4]   [4,4]
@@ -21,37 +16,59 @@ interface Props {
  * [0,0]   [1,0]   [2,0]   [3,0]   [4,0]
  */
 
-export const GridComponent: React.FC<Props> = ({ x, y, direction }) => {
-  const length = useRef(5);
+interface Props {
+  value?: string;
+}
+
+export const GridComponent: React.FC<Props> = ({ value }) => {
+  const [inputValue, setInputValue] = useState(value ?? '');
+  const { direction, x, y, error } = useParseValue(inputValue);
 
   const grid = useMemo(() => {
-    return Array.from(Array(length.current).keys())
+    return Array.from(Array(5).keys())
       .reverse()
       .map((row) => (
         <Row container columns={10} size={1} key={row} spacing={1} justifyContent="center">
-          {Array.from(Array(length.current).keys()).map((col) => (
-            <DataContainer col={col} direction={direction} row={row} x={x} y={y} />
+          {Array.from(Array(5).keys()).map((col) => (
+            <DataContainer key={col} col={col} direction={direction} row={row} x={x} y={y} />
           ))}
         </Row>
       ));
   }, [x, y, direction]);
 
   return (
-    <Container container columns={1} spacing={1}>
-      {grid}
-    </Container>
+    <>
+      <TextField
+        label="x,y direction"
+        fullWidth
+        sx={{ pb: 4 }}
+        error={!!error}
+        helperText={error}
+        id="outlined-basic"
+        variant="outlined"
+        size="small"
+        value={inputValue}
+        onChange={({ currentTarget }) => {
+          setInputValue(currentTarget.value);
+        }}
+      />
+      <Container container columns={1} spacing={1}>
+        {grid}
+      </Container>
+    </>
   );
 };
 
-interface DataProps extends Props {
+interface DataProps {
   row: number;
   col: number;
+  x: number | null | undefined;
+  y: number | null | undefined;
+  direction: DirectionType | null | undefined;
 }
 
 const DataContainer: React.FC<DataProps> = ({ col, direction, row, x, y }) => {
   const isSelectedData = typeof y === 'number' && typeof x === 'number' && y === row && x === col;
-
-  // const isNotValidDirectio = direction === null || direction === undefined;
 
   const isValidDirection = direction !== null && direction !== undefined;
 
