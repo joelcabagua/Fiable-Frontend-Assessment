@@ -6,7 +6,9 @@ export const theme = createTheme({
     dark: false
   },
   palette: {
-    primary: green,
+    primary: {
+      main: green[300]
+    },
     tonalOffset: {
       light: 0.1,
       dark: 0.9
