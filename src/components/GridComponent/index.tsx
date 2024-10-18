@@ -1,5 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
-import { Container, Row } from './styled';
+import React, { useMemo, useState } from 'react';
 import { Grid } from '@mui/system';
 import { alpha, TextField } from '@mui/material';
 import { theme } from '../../theme';
@@ -18,11 +17,11 @@ export type DirectionType = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST';
  */
 
 interface Props {
-  value?: string;
+  defaultValue?: string;
 }
 
-export const GridComponent: React.FC<Props> = ({ value }) => {
-  const [inputValue, setInputValue] = useState(value ?? '');
+export const GridComponent: React.FC<Props> = ({ defaultValue }) => {
+  const [inputValue, setInputValue] = useState(defaultValue ?? '');
   const debouncedValue = useDebounce(inputValue);
 
   const { direction, x, y, error } = useParseValue(debouncedValue);
@@ -31,11 +30,11 @@ export const GridComponent: React.FC<Props> = ({ value }) => {
     return Array.from(Array(5).keys())
       .reverse()
       .map((row) => (
-        <Row container columns={10} size={1} key={row} spacing={1} justifyContent="center">
+        <Grid container columns={10} size={1} key={row} spacing={1} justifyContent="center">
           {Array.from(Array(5).keys()).map((col) => (
             <DataContainer key={col} col={col} direction={direction} row={row} x={x} y={y} />
           ))}
-        </Row>
+        </Grid>
       ));
   }, [x, y, direction]);
 
@@ -55,9 +54,9 @@ export const GridComponent: React.FC<Props> = ({ value }) => {
           setInputValue(currentTarget.value);
         }}
       />
-      <Container container columns={1} spacing={1}>
+      <Grid container columns={1} spacing={1}>
         {grid}
-      </Container>
+      </Grid>
     </>
   );
 };
