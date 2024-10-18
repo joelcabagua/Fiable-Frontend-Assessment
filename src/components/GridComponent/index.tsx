@@ -5,6 +5,7 @@ import { alpha, TextField } from '@mui/material';
 import { theme } from '../../theme';
 import { Pointer } from './Pointer';
 import { useParseValue } from '../../hooks/useParseValue';
+import useDebounce from '../../hooks/useDebounce';
 
 export type DirectionType = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST';
 
@@ -22,7 +23,9 @@ interface Props {
 
 export const GridComponent: React.FC<Props> = ({ value }) => {
   const [inputValue, setInputValue] = useState(value ?? '');
-  const { direction, x, y, error } = useParseValue(inputValue);
+  const debouncedValue = useDebounce(inputValue);
+
+  const { direction, x, y, error } = useParseValue(debouncedValue);
 
   const grid = useMemo(() => {
     return Array.from(Array(5).keys())
