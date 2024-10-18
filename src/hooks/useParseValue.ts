@@ -11,6 +11,8 @@ export const useParseValue = (value: string) => {
   useEffect(() => {
     if (value.length < 1) {
       setError('');
+      setX(undefined);
+      setY(undefined);
       return;
     }
 
