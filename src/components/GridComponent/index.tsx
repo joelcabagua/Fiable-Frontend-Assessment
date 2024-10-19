@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Grid } from '@mui/system';
-import { alpha, TextField } from '@mui/material';
+import { Alert, alpha, TextField } from '@mui/material';
 import { theme } from '../../theme';
 import { Pointer } from './Pointer';
 import { useParseValue } from '../../hooks/useParseValue';
@@ -17,14 +17,11 @@ export type DirectionType = 'NORTH' | 'SOUTH' | 'EAST' | 'WEST';
  */
 
 interface Props {
-  defaultValue?: string;
+  inputValue?: string;
 }
 
-export const GridComponent: React.FC<Props> = ({ defaultValue }) => {
-  const [inputValue, setInputValue] = useState(defaultValue ?? '');
-  const debouncedValue = useDebounce(inputValue);
-
-  const { direction, x, y, error } = useParseValue(debouncedValue);
+export const GridComponent: React.FC<Props> = ({ inputValue }) => {
+  const { direction, x, y, error } = useParseValue(inputValue ?? '');
 
   const grid = useMemo(() => {
     return Array.from(Array(5).keys())
@@ -40,23 +37,14 @@ export const GridComponent: React.FC<Props> = ({ defaultValue }) => {
 
   return (
     <>
-      <TextField
-        label="x,y direction"
-        fullWidth
-        sx={{ pb: 4 }}
-        error={!!error}
-        helperText={error}
-        id="outlined-basic"
-        variant="outlined"
-        size="small"
-        value={inputValue}
-        onChange={({ currentTarget }) => {
-          setInputValue(currentTarget.value);
-        }}
-      />
       <Grid container columns={1} spacing={1}>
         {grid}
       </Grid>
+      {!!error && (
+        <Alert sx={{ mt: 2 }} icon={false} severity="error">
+          {error}
+        </Alert>
+      )}
     </>
   );
 };

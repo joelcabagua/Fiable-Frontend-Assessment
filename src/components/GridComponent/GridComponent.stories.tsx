@@ -27,30 +27,30 @@ type Story = StoryObj<typeof meta>;
 
 export const PositionAt00South: Story = {
   args: {
-    defaultValue: '0,0, SOUTH'
+    inputValue: '0,0, SOUTH'
   }
 };
 
 export const PositionAt44West: Story = {
   args: {
-    defaultValue: '4,4, WEST'
+    inputValue: '4,4, WEST'
   }
 };
 
 export const InvalidDirection: Story = {
   args: {
-    defaultValue: '2,2, WES'
+    inputValue: '2,2, WES'
   }
 };
 
 export const InvalidCoordinates: Story = {
   args: {
-    defaultValue: 'A,1, SOUTH'
+    inputValue: 'A,1, SOUTH'
   }
 };
 
 export const CoordinatesOutOfRange: Story = {
   args: {
-    defaultValue: '5,1, EAST'
+    inputValue: '5,1, EAST'
   }
 };
