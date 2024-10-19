@@ -28,7 +28,7 @@ function App() {
                 setInputValue(currentTarget.value);
               }}
             />
-            <GridComponent inputValue={inputValue} />
+            <GridComponent inputValue={debouncedValue} />
           </CardContent>
         </Card>
       </Box>

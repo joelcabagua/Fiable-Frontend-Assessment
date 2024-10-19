@@ -4,31 +4,8 @@ import { act } from 'react'; // Import act from react
 import { GridComponent } from './index';
 
 describe('GridComponent', () => {
-  it('renders without problem', () => {
-    render(<GridComponent />);
-    expect(screen.getByLabelText(/x,y direction/i)).toBeInTheDocument();
-  });
-
-  it('updates input value correctly', () => {
-    render(<GridComponent />);
-    const input = screen.getByLabelText(/x,y direction/i);
-
-    act(() => {
-      fireEvent.change(input, { target: { value: '1,1 NORTH' } });
-    });
-
-    expect(input).toHaveValue('1,1 NORTH');
-  });
-
   it('shows an icon if the input value is valid', async () => {
-    render(<GridComponent />);
-    const input = screen.getByLabelText(/x,y direction/i);
-
-    act(() => {
-      fireEvent.change(input, { target: { value: '1,1 NORTH' } });
-    });
-
-    expect(input).toHaveValue('1,1 NORTH');
+    render(<GridComponent inputValue="1,1 NORTH" />);
 
     // Check if the Pointer component or icon is rendered
     const pointerIcon = await screen.findByTestId('pointer-icon');
@@ -46,12 +23,7 @@ const directions = [
 describe('GridComponent Pointer Direction', () => {
   directions.forEach(({ input, expectedRotation }) => {
     it(`shows an icon with correct direction for input "${input}"`, async () => {
-      render(<GridComponent />);
-      const inputField = screen.getByLabelText(/x,y direction/i);
-
-      act(() => {
-        fireEvent.change(inputField, { target: { value: input } });
-      });
+      render(<GridComponent inputValue={input} />);
 
       // Check if the Pointer component or icon is rendered
       const pointerIcon = await screen.findByTestId('pointer-icon');
@@ -59,6 +31,24 @@ describe('GridComponent Pointer Direction', () => {
 
       // Check if the transform style has the correct rotate value
       expect(pointerIcon).toHaveStyle(`transform: ${expectedRotation}`);
+    });
+  });
+});
+
+const errors = [
+  { input: '1,1 NORT', expectedError: 'Invalid direction' },
+  { input: 'a,1 EAST', expectedError: 'Invalid coordinates.' },
+  { input: '5,1 SOUTH', expectedError: 'Coordinates out of range.' }
+];
+
+describe('GridComponent Error Handling', () => {
+  errors.forEach(({ input, expectedError }) => {
+    it(`shows an error message for invalid input: "${input}"`, async () => {
+      render(<GridComponent inputValue={input} />);
+
+      // Check if the Pointer component or icon is rendered
+      const errorAlert = await screen.findByText(expectedError);
+      expect(errorAlert).toBeInTheDocument();
     });
   });
 });
